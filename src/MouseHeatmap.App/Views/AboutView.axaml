@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.AboutView">
+
+    <ScrollViewer>
+        <StackPanel Spacing="12" MaxWidth="720" HorizontalAlignment="Left">
+
+            <TextBlock Text="🖱️ Mouse Heatmap Recorder" FontSize="24" FontWeight="Bold" />
+            <TextBlock Text="Sürüm 1.0.0 — .NET 8 + Avalonia UI" Classes="statTitle" />
+
+            <TextBlock TextWrapping="Wrap" Text="Mouse hareketlerinizi arka planda kaydedip profesyonel ısı haritaları, kullanım istatistikleri ve yapay zeka destekli içgörüler üreten açık kaynak masaüstü uygulaması." />
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="🔒 Gizlilik Taahhüdü" FontWeight="SemiBold" FontSize="15" />
+                    <TextBlock TextWrapping="Wrap" Text="• Klavye KESİNLİKLE izlenmez — keylogger yoktur, klavye hook'u dahi kurulmaz." />
+                    <TextBlock TextWrapping="Wrap" Text="• Yalnızca mouse koordinatları, tıklama ve scroll olayları kaydedilir." />
+                    <TextBlock TextWrapping="Wrap" Text="• Tüm veriler yalnızca bu bilgisayarda saklanır; internete gönderilmez." />
+                    <TextBlock TextWrapping="Wrap" Text="• Mod analizi tamamen mouse dinamiklerine dayanır; hangi uygulamanın açık olduğuna bakılmaz." />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="✨ Özellikler" FontWeight="SemiBold" FontSize="15" />
+                    <TextBlock TextWrapping="Wrap" Text="Çoklu monitör desteği · Gerçek zamanlı heatmap · Oyun/Çalışma modu analizi · Mouse hız analizi · Verimlilik skoru · Yapay zeka içgörüleri · PNG/PDF/CSV/JSON rapor" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="🛠️ Teknolojiler" FontWeight="SemiBold" FontSize="15" />
+                    <TextBlock TextWrapping="Wrap" Text="C# · .NET 8 · Avalonia UI · SkiaSharp · SQLite · Win32 API · CommunityToolkit.Mvvm" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

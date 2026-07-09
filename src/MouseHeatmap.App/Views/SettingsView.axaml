@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <ScrollViewer>
+        <StackPanel Spacing="14" MaxWidth="620" HorizontalAlignment="Left">
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Kayıt Hassasiyeti" Classes="sectionTitle" />
+                    <Grid ColumnDefinitions="*,160" RowDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Minimum hareket (piksel)" />
+                            <TextBlock Text="Mouse bu kadar pikselden fazla hareket ederse kayıt oluşur."
+                                       Classes="statTitle" />
+                        </StackPanel>
+                        <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="100"
+                                       Increment="1" Value="{Binding MinDistancePx}" Margin="0,0,0,10" />
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Kayıt aralığı (ms)" />
+                            <TextBlock Text="Son kayıttan bu kadar süre geçtiyse kayıt oluşur."
+                                       Classes="statTitle" />
+                        </StackPanel>
+                        <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="10" Maximum="2000"
+                                       Increment="10" Value="{Binding MinIntervalMs}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Uygulama Davranışı" Classes="sectionTitle" />
+                    <CheckBox Content="Windows açılışında otomatik başlat"
+                              IsChecked="{Binding Autostart}" />
+                    <CheckBox Content="Uygulama açılınca kaydı hemen başlat"
+                              IsChecked="{Binding StartRecordingOnLaunch}" />
+                    <ToggleSwitch Content="Koyu tema" IsChecked="{Binding IsDarkTheme}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Veritabanı" Classes="sectionTitle" />
+                    <TextBlock Text="Veritabanı yolu:" Classes="statTitle" />
+                    <TextBox Text="{Binding DatabasePath}" IsReadOnly="True" />
+                    <TextBlock Text="Tüm veriler yalnızca bu bilgisayarda saklanır; internete gönderilmez."
+                               Classes="statTitle" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Content="Ayarları Kaydet" Command="{Binding SaveCommand}" Classes="primary" />
+                <TextBlock Text="{Binding StatusText}" Classes="statTitle" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

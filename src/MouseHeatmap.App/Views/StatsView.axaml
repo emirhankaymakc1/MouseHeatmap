@@ -1,0 +1,129 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             xmlns:conv="using:MouseHeatmap.App.Converters"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.StatsView"
+             x:DataType="vm:StatsViewModel">
+
+    <UserControl.Resources>
+        <conv:RatioToHeightConverter x:Key="RatioToHeight" />
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Spacing="14">
+
+            <WrapPanel>
+                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,16,0" VerticalAlignment="Center">
+                    <TextBlock Text="Dönem:" VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding Periods}" SelectedItem="{Binding SelectedPeriod}"
+                              MinWidth="120" />
+                </StackPanel>
+                <Button Content="Yenile" Command="{Binding RefreshCommand}" Classes="primary"
+                        Margin="0,0,16,0" />
+                <Button Content="CSV Aktar" Command="{Binding ExportCsvCommand}" Margin="0,0,6,0" />
+                <Button Content="JSON Aktar" Command="{Binding ExportJsonCommand}" Margin="0,0,6,0" />
+                <Button Content="PDF Aktar" Command="{Binding ExportPdfCommand}" />
+            </WrapPanel>
+
+            <Border Classes="statCard">
+                <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto"
+                      HorizontalAlignment="Stretch">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="4">
+                        <TextBlock Text="{Binding ActiveTime}" Classes="statValue" />
+                        <TextBlock Text="Aktif Kullanım" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="4">
+                        <TextBlock Text="{Binding Distance}" Classes="statValue" />
+                        <TextBlock Text="Toplam Mesafe" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Margin="4">
+                        <TextBlock Text="{Binding Clicks}" Classes="statValue" />
+                        <TextBlock Text="Tıklamalar" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="3" Margin="4">
+                        <TextBlock Text="{Binding Scrolls}" Classes="statValue" />
+                        <TextBlock Text="Scroll" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="4">
+                        <TextBlock Text="{Binding BusiestHour}" Classes="statValue" />
+                        <TextBlock Text="En Yoğun Saat" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="4">
+                        <TextBlock Text="{Binding BusiestDay}" Classes="statValue" />
+                        <TextBlock Text="En Yoğun Gün" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="4">
+                        <TextBlock Text="{Binding BusiestRegion}" Classes="statValue" />
+                        <TextBlock Text="En Yoğun Bölge" Classes="statTitle" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="3" Margin="4">
+                        <TextBlock Text="{Binding TotalEvents}" Classes="statValue" />
+                        <TextBlock Text="Toplam Olay" Classes="statTitle" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel>
+                    <TextBlock Text="Saatlik Yoğunluk" Classes="sectionTitle" />
+                    <ItemsControl ItemsSource="{Binding HourlyBars}" Height="180">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="2"
+                                            VerticalAlignment="Bottom" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChartBar">
+                                <StackPanel VerticalAlignment="Bottom" Width="30">
+                                    <Border Background="#63B3ED" CornerRadius="3,3,0,0"
+                                            Width="22" HorizontalAlignment="Center"
+                                            Height="{Binding HeightRatio,
+                                                Converter={StaticResource RatioToHeight},
+                                                ConverterParameter=150}"
+                                            ToolTip.Tip="{Binding Value}" />
+                                    <TextBlock Text="{Binding Label}" FontSize="9"
+                                               HorizontalAlignment="Center" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel>
+                    <TextBlock Text="Haftalık Yoğunluk" Classes="sectionTitle" />
+                    <ItemsControl ItemsSource="{Binding WeekdayBars}" Height="180">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="10"
+                                            VerticalAlignment="Bottom" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChartBar">
+                                <StackPanel VerticalAlignment="Bottom" Width="70">
+                                    <Border Background="#E67E22" CornerRadius="3,3,0,0"
+                                            Width="50" HorizontalAlignment="Center"
+                                            Height="{Binding HeightRatio,
+                                                Converter={StaticResource RatioToHeight},
+                                                ConverterParameter=150}"
+                                            ToolTip.Tip="{Binding Value}" />
+                                    <TextBlock Text="{Binding Label}" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{Binding StatusText}" Classes="statTitle" />
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

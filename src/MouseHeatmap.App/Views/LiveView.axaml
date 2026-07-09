@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.LiveView"
+             x:DataType="vm:LiveViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+            <TextBlock Grid.Column="0" Text="{Binding CursorPosition}"
+                       FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <CheckBox Grid.Column="1" Content="Akışı duraklat (kayıt sürer)"
+                      IsChecked="{Binding IsPaused}" />
+        </Grid>
+
+        <Border Grid.Row="1" Classes="statCard" Padding="0">
+            <DataGrid ItemsSource="{Binding Rows}"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      HeadersVisibility="Column"
+                      CanUserResizeColumns="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Zaman" Binding="{Binding Time}" Width="120" />
+                    <DataGridTextColumn Header="Tür" Binding="{Binding Type}" Width="120" />
+                    <DataGridTextColumn Header="Konum" Binding="{Binding Position}" Width="160" />
+                    <DataGridTextColumn Header="Detay" Binding="{Binding Detail}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+
+</UserControl>

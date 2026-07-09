@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.HeatmapView"
+             x:DataType="vm:HeatmapViewModel">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <WrapPanel Grid.Row="0" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,16,8" VerticalAlignment="Center">
+                <TextBlock Text="Dönem:" VerticalAlignment="Center" />
+                <ComboBox ItemsSource="{Binding Periods}" SelectedItem="{Binding SelectedPeriod}"
+                          MinWidth="120" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,16,8" VerticalAlignment="Center">
+                <TextBlock Text="Monitör:" VerticalAlignment="Center" />
+                <ComboBox ItemsSource="{Binding Monitors}" SelectedItem="{Binding SelectedMonitor}"
+                          MinWidth="180" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,16,8" VerticalAlignment="Center">
+                <TextBlock Text="Veri:" VerticalAlignment="Center" />
+                <ComboBox ItemsSource="{Binding DataTypes}" SelectedItem="{Binding SelectedDataType}"
+                          MinWidth="120" />
+            </StackPanel>
+            <Button Content="Heatmap Oluştur" Command="{Binding GenerateCommand}"
+                    Classes="primary" Margin="0,0,8,8"
+                    IsEnabled="{Binding !IsRealtime}" />
+            <Button Content="PNG Kaydet" Command="{Binding SavePngCommand}"
+                    Margin="0,0,8,8" />
+            <ToggleSwitch Content="Gerçek Zamanlı" IsChecked="{Binding IsRealtime}"
+                          Margin="8,0,0,8" VerticalAlignment="Center" />
+        </WrapPanel>
+
+        <Border Grid.Row="1" Classes="statCard" Padding="4">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image Source="{Binding HeatmapImage}"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock Grid.Row="2" Text="{Binding StatusText}" Classes="statTitle" Margin="0,10,0,0" />
+    </Grid>
+
+</UserControl>

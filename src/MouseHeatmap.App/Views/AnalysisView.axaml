@@ -1,0 +1,147 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             xmlns:conv="using:MouseHeatmap.App.Converters"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.AnalysisView"
+             x:DataType="vm:AnalysisViewModel">
+
+    <UserControl.Resources>
+        <conv:RatioToHeightConverter x:Key="RatioToHeight" />
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Spacing="14">
+
+            <WrapPanel>
+                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,16,0" VerticalAlignment="Center">
+                    <TextBlock Text="Dönem:" VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding Periods}" SelectedItem="{Binding SelectedPeriod}"
+                              MinWidth="120" />
+                </StackPanel>
+                <Button Content="🤖 Analiz Et" Command="{Binding AnalyzeCommand}" Classes="primary" />
+            </WrapPanel>
+
+            <Grid ColumnDefinitions="*,*">
+
+                <Border Grid.Column="0" Classes="statCard" Margin="0,0,7,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Verimlilik Skoru" Classes="sectionTitle" />
+                        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding ScoreTotal}" FontSize="48" FontWeight="Bold"
+                                       Foreground="{DynamicResource AccentText}" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ScoreGrade}" FontSize="28" FontWeight="Bold" />
+                                <TextBlock Text="/ 100" Classes="statTitle" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Aktiflik oranı" Classes="statTitle" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ActivityRatio}" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Çalışma oranı" Classes="statTitle" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding WorkRatio}" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Hareket verimi" Classes="statTitle" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding MovementEfficiency}" />
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Tutarlılık" Classes="statTitle" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Consistency}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Classes="statCard" Margin="7,0,0,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Kullanım Modu Dağılımı" Classes="sectionTitle" />
+                        <ItemsControl ItemsSource="{Binding ModeBars}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ModeBar">
+                                    <Grid ColumnDefinitions="120,*,60" Margin="0,3">
+                                        <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" />
+                                        <Border Grid.Column="1" Background="{DynamicResource CardBorder}"
+                                                CornerRadius="4" Height="18" HorizontalAlignment="Stretch">
+                                            <Border Background="{Binding Color}" CornerRadius="4"
+                                                    HorizontalAlignment="Left"
+                                                    Width="{Binding Ratio,
+                                                        Converter={StaticResource RatioToHeight},
+                                                        ConverterParameter=180}" />
+                                        </Border>
+                                        <TextBlock Grid.Column="2" Text="{Binding Minutes, StringFormat='{}{0:F0} dk'}"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                   FontSize="11" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="Mouse Hız Analizi" Classes="sectionTitle" Margin="0,10,0,0" />
+                        <Grid ColumnDefinitions="*,*,*">
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding AvgSpeed}" FontWeight="Bold" />
+                                <TextBlock Text="Ortalama" Classes="statTitle" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding MedianSpeed}" FontWeight="Bold" />
+                                <TextBlock Text="Medyan" Classes="statTitle" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{Binding MaxSpeed}" FontWeight="Bold" />
+                                <TextBlock Text="Tepe" Classes="statTitle" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Classes="statCard">
+                <StackPanel>
+                    <TextBlock Text="Hız Dağılımı (px/sn)" Classes="sectionTitle" />
+                    <ItemsControl ItemsSource="{Binding SpeedHistogram}" Height="150">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="14"
+                                            VerticalAlignment="Bottom" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChartBar">
+                                <StackPanel VerticalAlignment="Bottom" Width="80">
+                                    <Border Background="#9F7AEA" CornerRadius="3,3,0,0"
+                                            Width="56" HorizontalAlignment="Center"
+                                            Height="{Binding HeightRatio,
+                                                Converter={StaticResource RatioToHeight},
+                                                ConverterParameter=120}"
+                                            ToolTip.Tip="{Binding Value}" />
+                                    <TextBlock Text="{Binding Label}" FontSize="10"
+                                               HorizontalAlignment="Center" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="🧠 Kişiselleştirilmiş İçgörüler" Classes="sectionTitle" />
+            <ItemsControl ItemsSource="{Binding Insights}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:InsightCard">
+                        <Border Classes="insightCard">
+                            <Grid ColumnDefinitions="Auto,*">
+                                <TextBlock Grid.Column="0" Text="{Binding Emoji}" FontSize="26"
+                                           Margin="0,0,14,0" VerticalAlignment="Top" />
+                                <StackPanel Grid.Column="1" Spacing="3">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14" />
+                                    <TextBlock Text="{Binding Detail}" Classes="statTitle"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="{Binding StatusText}" Classes="statTitle" />
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

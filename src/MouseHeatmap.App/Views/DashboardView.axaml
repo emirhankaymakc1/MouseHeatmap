@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MouseHeatmap.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             x:Class="MouseHeatmap.App.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" Classes="statCard" Margin="0,0,0,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding RecordingStatus}" FontSize="16" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding MonitorCount}" Classes="statTitle" />
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Content="{Binding ToggleButtonText}"
+                        Command="{Binding ToggleRecordingCommand}"
+                        Classes.danger="{Binding IsRecording}"
+                        Classes.primary="{Binding !IsRecording}" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl>
+                <ItemsControl.Styles>
+                    <Style Selector="Border.metric">
+                        <Setter Property="Width" Value="220" />
+                        <Setter Property="Margin" Value="0,0,12,12" />
+                    </Style>
+                </ItemsControl.Styles>
+                <WrapPanel>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding TodayUsage}" Classes="statValue" />
+                            <TextBlock Text="Bugünkü Aktif Kullanım" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding WeekUsage}" Classes="statValue" />
+                            <TextBlock Text="Son 7 Gün Aktif Kullanım" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding TodayClicks}" Classes="statValue" />
+                            <TextBlock Text="Toplam Tıklama (Bugün)" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding TodayDistance}" Classes="statValue" />
+                            <TextBlock Text="Mouse Mesafesi (Bugün)" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding CpuUsage}" Classes="statValue" />
+                            <TextBlock Text="CPU Kullanımı" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding RamUsage}" Classes="statValue" />
+                            <TextBlock Text="RAM Kullanımı" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding SessionEvents}" Classes="statValue" />
+                            <TextBlock Text="Bu Oturumdaki Olaylar" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="statCard metric">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding PendingWrites}" Classes="statValue" />
+                            <TextBlock Text="Diske Yazım Bekleyen" Classes="statTitle" />
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>

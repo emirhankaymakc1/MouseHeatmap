@@ -1,0 +1,15 @@
+# .NET derleme çıktıları
+bin/
+obj/
+*.user
+.vs/
+publish/
+
+# Kullanıcı verileri (gizlilik: mouse kayıtları asla repoya girmez)
+data/
+logs/
+reports/
+
+# IDE
+.idea/
+.vscode/
