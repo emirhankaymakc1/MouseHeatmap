@@ -82,9 +82,8 @@ public sealed class ReportExporter
         using var document = SKDocument.CreatePdf(stream);
         using var canvas = document.BeginPage(pageW, pageH);
 
-        using var titleFont = new SKFont(SKTypeface.FromFamilyName("Segoe UI",
-            SKFontStyle.Bold), 20);
-        using var textFont = new SKFont(SKTypeface.FromFamilyName("Segoe UI"), 11);
+        using var titleFont = new SKFont(GetTypeface("Segoe UI", SKFontStyle.Bold), 20);
+        using var textFont = new SKFont(GetTypeface("Segoe UI", SKFontStyle.Normal), 11);
         using var paint = new SKPaint { Color = SKColors.Black, IsAntialias = true };
 
         var y = margin + 10;
@@ -136,9 +135,8 @@ public sealed class ReportExporter
         SKCanvas canvas, string title, (double Value, string Label)[] data,
         float x, float y, float width, float height, SKColor barColor)
     {
-        using var titleFont = new SKFont(SKTypeface.FromFamilyName("Segoe UI",
-            SKFontStyle.Bold), 13);
-        using var labelFont = new SKFont(SKTypeface.FromFamilyName("Segoe UI"), 8);
+        using var titleFont = new SKFont(GetTypeface("Segoe UI", SKFontStyle.Bold), 13);
+        using var labelFont = new SKFont(GetTypeface("Segoe UI", SKFontStyle.Normal), 8);
         using var paint = new SKPaint { IsAntialias = true };
 
         paint.Color = SKColors.Black;
@@ -163,5 +161,22 @@ public sealed class ReportExporter
             paint.Color = SKColors.DarkGray;
             canvas.DrawText(data[i].Label, barX, y + chartH + 12, labelFont, paint);
         }
+    }
+
+    private static SKTypeface GetTypeface(string preferredFamily, SKFontStyle style)
+    {
+        var tf = SKTypeface.FromFamilyName(preferredFamily, style);
+        if (tf != null && tf.FamilyName.Equals(preferredFamily, StringComparison.OrdinalIgnoreCase))
+            return tf;
+
+        var fallbacks = new[] { "Arial", "Calibri", "Helvetica", "sans-serif" };
+        foreach (var fb in fallbacks)
+        {
+            var fallbackTf = SKTypeface.FromFamilyName(fb, style);
+            if (fallbackTf != null && fallbackTf.FamilyName.Equals(fb, StringComparison.OrdinalIgnoreCase))
+                return fallbackTf;
+        }
+
+        return tf ?? SKTypeface.Default;
     }
 }

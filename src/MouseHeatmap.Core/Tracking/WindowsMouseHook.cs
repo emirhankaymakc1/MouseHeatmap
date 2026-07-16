@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Threading;
 using MouseHeatmap.Core.Models;
 
 namespace MouseHeatmap.Core.Tracking;
@@ -65,6 +66,7 @@ public sealed class WindowsMouseHook : IDisposable
     private static extern IntPtr GetModuleHandle(string? moduleName);
 
     private readonly HookProc _hookProc;
+    private readonly ManualResetEventSlim _startEvent = new(false);
     private Thread? _hookThread;
     private IntPtr _hookHandle;
     private uint _hookThreadId;
@@ -80,6 +82,7 @@ public sealed class WindowsMouseHook : IDisposable
     {
         if (_running) return;
         _running = true;
+        _startEvent.Reset();
 
         _hookThread = new Thread(MessagePump)
         {
@@ -87,6 +90,8 @@ public sealed class WindowsMouseHook : IDisposable
             IsBackground = true
         };
         _hookThread.Start();
+        
+        _startEvent.Wait(TimeSpan.FromSeconds(2));
     }
 
     public void Stop()
@@ -105,6 +110,8 @@ public sealed class WindowsMouseHook : IDisposable
         _hookThreadId = GetCurrentThreadId();
         _hookHandle = SetWindowsHookEx(
             WhMouseLl, _hookProc, GetModuleHandle(null), 0);
+
+        _startEvent.Set();
 
         if (_hookHandle == IntPtr.Zero)
         {

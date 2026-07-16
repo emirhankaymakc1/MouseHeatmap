@@ -63,23 +63,30 @@ public sealed partial class HeatmapViewModel : ObservableObject
 
         try
         {
-            var bitmap = await Task.Run(() =>
+            var result = await Task.Run<(Bitmap?, SKBitmap?)>(() =>
             {
                 var events = _services.Statistics.LoadEvents(start, type: type,
                     monitorIndex: monitor.Index);
-                return events.Count == 0
-                    ? null
-                    : _services.Heatmap.Render(events, monitor);
+                if (events.Count == 0) return (null, null);
+
+                var skiaBitmap = _services.Heatmap.Render(events, monitor);
+                var avaloniaBitmap = BitmapBridge.ToAvalonia(skiaBitmap);
+                return (avaloniaBitmap, skiaBitmap);
             });
 
-            if (bitmap is null)
+            if (result.Item1 is null || result.Item2 is null)
             {
                 StatusText = "Seçilen dönem/monitör için veri bulunamadı.";
+                SwapBitmap(null, null);
                 return;
             }
 
-            SwapBitmap(bitmap);
+            SwapBitmap(result.Item1, result.Item2);
             StatusText = "Heatmap hazır.";
+        }
+        catch (Exception ex)
+        {
+            StatusText = $"Hata oluştu: {ex.Message}";
         }
         finally
         {
@@ -140,23 +147,37 @@ public sealed partial class HeatmapViewModel : ObservableObject
         grid[gy * _liveGridW + gx] += e.Type == EventType.Click ? 5f : 1f;
     }
 
-    private void RenderLiveFrame()
+    private async void RenderLiveFrame()
     {
         var grid = _liveGrid;
-        if (grid is null) return;
+        if (grid is null || IsBusy) return;
+
+        var gridCopy = (float[])grid.Clone();
 
         for (var i = 0; i < grid.Length; i++)
             grid[i] *= 0.92f;
 
-        var bitmap = _services.Heatmap.RenderLiveGrid(grid, _liveGridW, _liveGridH);
-        SwapBitmap(bitmap);
+        try
+        {
+            var result = await Task.Run(() =>
+            {
+                var skiaBitmap = _services.Heatmap.RenderLiveGrid(gridCopy, _liveGridW, _liveGridH);
+                var avaloniaBitmap = BitmapBridge.ToAvalonia(skiaBitmap);
+                return (avaloniaBitmap, skiaBitmap);
+            });
+
+            SwapBitmap(result.Item1, result.Item2);
+        }
+        catch
+        {
+        }
     }
 
-    private void SwapBitmap(SKBitmap bitmap)
+    private void SwapBitmap(Bitmap? avaloniaBitmap, SKBitmap? skiaBitmap)
     {
         var old = _lastBitmap;
-        _lastBitmap = bitmap;
-        HeatmapImage = BitmapBridge.ToAvalonia(bitmap);
+        _lastBitmap = skiaBitmap;
+        HeatmapImage = avaloniaBitmap;
         old?.Dispose();
     }
 }

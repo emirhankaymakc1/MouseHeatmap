@@ -6,9 +6,9 @@ obj/
 publish/
 
 # Kullanıcı verileri (gizlilik: mouse kayıtları asla repoya girmez)
-data/
-logs/
-reports/
+/data/
+/logs/
+/reports/
 
 # IDE
 .idea/
