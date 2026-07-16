@@ -5,11 +5,26 @@
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
              x:Class="MouseHeatmap.App.Views.AboutView">
 
+    <UserControl.Styles>
+        <Style Selector="Button.link">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentText}" />
+            <Setter Property="Padding" Value="0,2" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.link:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#3182CE" />
+            <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+        </Style>
+    </UserControl.Styles>
+
     <ScrollViewer>
         <StackPanel Spacing="12" MaxWidth="720" HorizontalAlignment="Left">
 
             <TextBlock Text="🖱️ Mouse Heatmap Recorder" FontSize="24" FontWeight="Bold" />
-            <TextBlock Text="Sürüm 1.0.0 — .NET 8 + Avalonia UI" Classes="statTitle" />
+            <TextBlock Text="Sürüm 1.1.0 — .NET 8 + Avalonia UI" Classes="statTitle" />
 
             <TextBlock TextWrapping="Wrap" Text="Mouse hareketlerinizi arka planda kaydedip profesyonel ısı haritaları, kullanım istatistikleri ve yapay zeka destekli içgörüler üreten açık kaynak masaüstü uygulaması." />
 
@@ -34,6 +49,17 @@
                 <StackPanel Spacing="6">
                     <TextBlock Text="🛠️ Teknolojiler" FontWeight="SemiBold" FontSize="15" />
                     <TextBlock TextWrapping="Wrap" Text="C# · .NET 8 · Avalonia UI · SkiaSharp · SQLite · Win32 API · CommunityToolkit.Mvvm" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="statCard">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="🔗 Bağlantılar" FontWeight="SemiBold" FontSize="15" />
+                    <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,4,0,0">
+                        <Button Content="LinkedIn Profile" Tag="https://www.linkedin.com/in/emirhankaymakc1/" Click="OpenLink" Classes="link" />
+                        <Button Content="GitHub Repository" Tag="https://github.com/emirhankaymakc1/MouseHeatmap" Click="OpenLink" Classes="link" />
+                        <Button Content="TurQuartz.com" Tag="https://turquartz.com" Click="OpenLink" Classes="link" />
+                    </StackPanel>
                 </StackPanel>
             </Border>
 
